@@ -9,6 +9,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<style>
 #customers {
   font-family: Arial, Helvetica, sans-serif;
@@ -32,6 +33,10 @@
   background-color: #04AA6D;
   color: white;
 }
+.del{
+	width: 56px;
+	
+}
 	</style>
 
 </head>
@@ -39,7 +44,7 @@
 	<div id="clock"></div>
 	<svg id="first" viewBox="0 0 960 300">
 	<symbol id="v-text">
-		<text text-anchor="middle" x="50%" y="80%" style="margin-left:20px;"> Welcome </text>
+		<text text-anchor="middle" x="50%" y="80%" style="margin-left:20px;"> Welcome</text>
 	</symbol>
 
 	<g class = "g-ants">
@@ -107,7 +112,8 @@ Register Your Self</button>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-						  <th>DOB</th>
+						<th>DOB</th>
+						<th>Action</th>
                       </tr>
 				<tbody id="user_table" style="colour:red;"></tbody>
 </table>
@@ -165,8 +171,8 @@ Register Your Self</button>
 					var data=response["user_data"]
 					console.log(data)
 					for (var i = 0; i < data.length; i++) {
-					dob=data[i]["dob"].slice(0,10)
-					 result = result + '<tr> <td>'+cnt+'</td><td>'+data[i]["Name"]+'</td><td>'+data[i]['Email']+'</td><td>'+data[i]['Mobile']+'</td><td>'+dob+'</td></tr>';
+					
+					 result = result + '<tr> <td>'+cnt+'</td><td>'+data[i]["Name"]+'</td><td>'+data[i]['Email']+'</td><td>'+data[i]['Mobile']+'</td><td>'+data[i]['dob']+'</td><td><button class="del" onclick="Delete_me('+data[i]['id']+')"><i class="fa fa-trash"></i></button></td></tr>';
 					 cnt = cnt+1;
 					}
 					$('#user_table').html(result);
@@ -297,8 +303,11 @@ $('#signup').on('click',function(){
         success: function (response) { // on success..
              console.log(response);
            if(response.status==1){
-				swal("Data Added Sucessfully")
-				window.location.reload();
+			swal({title: "Success", text: "User Added Successfully", type: 
+"success"}).then(function(){ 
+   window.location.reload();
+   }
+);
 				
            }else{
            		swal("Something went Wrong!...")
@@ -311,6 +320,27 @@ $('#signup').on('click',function(){
     });
 
 </script>
+<script>
+function Delete_me(id){
+	URl=$.get("/delete?id="+id,function(response) {
+		if(response.status==1){
+				
+			swal({title: "Success", text: "User Deleted Successfully", type: 
+"success"}).then(function(){ 
+   window.location.reload();
+   }
+);
+				
+           }else{
+           		swal("Something went Wrong!...")
+           }
+
+		
+	});   
+}
+
+</script>
+
 
 </body>
 </html>
