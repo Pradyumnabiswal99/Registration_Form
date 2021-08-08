@@ -5,7 +5,7 @@ from todo_list.logic import mail_sending
 from .models import User
 from django.contrib import messages
 
-from django.template.loader import get_template
+
 import time
 from todo_list import logic
 from django.core.cache import cache
@@ -75,3 +75,14 @@ def home(request):
     else:
         all_items = list.objects.all
         return render(request, 'home.html', {'all_items': all_items})
+
+def delete(request):
+    data={}
+    id=request.GET.get("id")
+    try:
+        User.objects.filter(id=id).delete()
+        data['status']=1
+    except:
+        data['status']=0
+
+    return JsonResponse(data, safe=False)
